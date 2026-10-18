@@ -1,16 +1,18 @@
 # ORBIT Build Progress
 
-## Latest Session — 2026-10-18 (Premium Frontend Redesign + GitHub Sync)
+## Latest Session — 2026-10-18 (Focused UI Polish Pass + GitHub Sync)
 
-### Frontend Transformation (Stage 3 & Design Directive)
-- **Visual Identity:** Implemented custom design system with midnight-navy foundation (`#070e1a`), electric-cyan (`#22d3ee`), cool teal (`#2dd4bf`), and warm amber accents. Fine atmospheric radial gradients and high-contrast typography tokens.
-- **Interactive Asset Directory (`BuildingSelector.tsx`):** Real-time campus building switcher displaying asset metadata, occupancy characteristics, operational schedules, and active radio selection.
-- **Centerpiece Strategy Visualizer (`ComparisonChart.tsx`):** Upgraded Recharts comparison chart featuring metric view filters (All Metrics, kWh Only, Cost ₹), custom formatted tooltips, distinct recommended strategy highlighting (`★ Recommended`), and dual-axis scaling.
-- **Dynamic Metric Cards (`KpiCards.tsx`):** Load composition progress bars (HVAC / Lighting / Other load distribution), daily baseline costs with tabular formatting, and post-analysis maximum estimated savings indicators.
-- **Recommendation Intelligence Panel (`RecommendationPanel.tsx`):** Visual explanation of top-ranked strategy, backend ranking score rationale (`score = pct_saved - comfort_penalty`), annualized scenario estimates, and comfort constraint audit.
-- **Candidate Strategy Breakdown (`StrategyCards.tsx`):** Individual strategy evaluation cards displaying percentage savings, daily cost reduction, energy delta, and color-coded comfort impact badges (`none`, `low`, `moderate`).
-- **Transparency & Governance Panel (`AssumptionsPanel.tsx`):** Expandable disclosure distinguishing simulated inputs, deterministic Python formulas, tariff assumptions, and non-actuating limitations.
-- **Operational Status:** Live API connectivity badge (`/health`), simulation indicator, and active analysis lifecycle states (`idle`, `running`, `done`, `error`).
+### Final UI Polish Pass (Stage 3 & User Directive)
+- **Reduced Vertical Spacing:** Tightened topbar padding, streamlined hero banner into a compact overview card, reduced gaps from 2rem to 1rem for maximum initial viewport information density.
+- **Compact Asset Intelligence Strip:** Added real-time summary strip to the initial viewport showing active facility, baseline demand in kWh/d, estimated daily cost, schedule, and tariff using verified API baseline metrics.
+- **Enhanced Asset Directory (`BuildingSelector.tsx`):** Added explicit `Active` status tag, baseline load and tariff figures directly on the card, and glowing cyan border-left indicator for unequivocal selection state across all 4 buildings.
+- **Enforced Analysis Visual Hierarchy:**
+  1. `RecommendationPanel` (Top priority: recommendation verdict, formula rationale, and annualized impact)
+  2. `ComparisonChart` & `StrategyCards` (Centerpiece multi-metric comparison & candidate strategy cards)
+  3. `KpiCards` (Supporting baseline context and load composition)
+  4. `AssumptionsPanel` (Transparency, modeling methodology & governance limitations)
+- **Precision Formatting:** All currencies formatted in Indian Rupees (`₹`) with commas and two decimals, energy formatted in `kWh/d`, clear non-clipping X-axis labels, and high-contrast tooltips.
+- **Accessibility & Contrast:** Elevated `--text-muted` to `#709ec4` for WCAG AA compliance against dark navy; added `:focus-visible` styling across all interactive elements.
 
 ### Verified Verification Run
 | Check | Result | Evidence |
@@ -22,8 +24,8 @@
 | `GET /health` | ✅ 200 `{"status":"ok"}` | Uvicorn running on port 8000 |
 | `GET /buildings` | ✅ 200 (4 buildings) | Loaded synchronously |
 | `POST /analyze` (All 4 buildings) | ✅ 200 (100% success rate) | Returns verified `StrategyResult[]` |
-| Frontend dev server | ✅ Running at http://localhost:5173 | Vite v8.3.4 |
-| Git repository sync | ✅ **Pushed to GitHub main** | Commit `0f6fabe` live on remote |
+| Frontend dev server | ✅ Running at http://localhost:5173 | Vite v8.3.4 (HMR active) |
+| Git repository sync | ✅ **Pushed to GitHub main** | Commit `4b550a0` live on remote |
 
 ---
 
@@ -41,7 +43,7 @@
 - [x] 2.6 Write/run energy_engine tests and record output
 - [x] 2.7 Write/run endpoint tests and record output
 
-## Stage 3 — Interface (Tier 0 & Premium Redesign)
+## Stage 3 — Interface (Tier 0 & Polish Pass)
 - [x] 3.1 Scaffold Vite + React + TypeScript app
 - [x] 3.2 Build typed API client with health checking
 - [x] 3.3 Build building selector + KPI cards with micro-visualizations
