@@ -7,7 +7,7 @@ from app.api.routes import router
 
 
 def _cors_origins() -> list[str]:
-    origins = os.getenv("FRONTEND_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
+    origins = os.getenv("FRONTEND_ORIGINS", "*")
     if origins.strip() == "*":
         return ["*"]
     return [origin.strip() for origin in origins.split(",") if origin.strip()]
@@ -23,7 +23,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins(),
     allow_credentials=False,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 

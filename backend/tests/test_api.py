@@ -47,3 +47,16 @@ def test_analyze_payload_validation():
 def test_analyze_payload_rejects_invalid_building_id_type():
     invalid = client.post("/analyze", json={"building_id": None, "objective": "Reduce electricity costs while maintaining comfort"})
     assert invalid.status_code == 422
+
+
+def test_cors_preflight_options():
+    response = client.options(
+        "/buildings",
+        headers={
+            "Origin": "https://orbit-autonomous-campus-energy.vercel.app",
+            "Access-Control-Request-Method": "GET",
+        },
+    )
+    assert response.status_code == 200
+    assert response.headers.get("access-control-allow-origin") in ["*", "https://orbit-autonomous-campus-energy.vercel.app"]
+
