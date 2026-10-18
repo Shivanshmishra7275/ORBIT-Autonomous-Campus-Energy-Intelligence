@@ -30,12 +30,14 @@ export function BuildingSelector({ buildings, selectedId, onSelect, loading }: P
     <div className="building-list" role="radiogroup" aria-label="Campus Building Selection">
       {buildings.map((building) => {
         const isSelected = building.building_id === selectedId;
+
         return (
           <button
             key={building.building_id}
             type="button"
             role="radio"
             aria-checked={isSelected}
+            tabIndex={0}
             className={`building-item ${isSelected ? 'active' : ''}`}
             onClick={() => onSelect(building.building_id)}
           >
@@ -44,18 +46,32 @@ export function BuildingSelector({ buildings, selectedId, onSelect, loading }: P
             </div>
 
             <div className="building-meta">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '4px' }}>
-                <span className="building-name">{building.name}</span>
-                <span className="building-id">{building.building_id}</span>
+              <div className="building-header-row">
+                <span className="building-name" title={building.name}>
+                  {building.name}
+                </span>
+                <div className="building-badge-row">
+                  {isSelected && <span className="building-active-tag">Active</span>}
+                  <span className="building-id">{building.building_id}</span>
+                </div>
               </div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '2px', display: 'flex', gap: '8px' }}>
+
+              <div className="building-metrics-row">
+                <span>{building.daily_kwh_baseline.toLocaleString('en-IN')} kWh/d</span>
+                <span>•</span>
+                <span>₹{building.tariff_inr_per_kwh.toFixed(2)}/kWh</span>
+              </div>
+
+              <div className="building-context-row">
                 <span>{building.occupancy_profile}</span>
                 <span>•</span>
                 <span>{building.operating_hours.start}–{building.operating_hours.end}</span>
               </div>
             </div>
 
-            <div className="building-check" aria-hidden="true" />
+            <div className="building-check" aria-hidden="true">
+              <div className="building-check-dot" />
+            </div>
           </button>
         );
       })}

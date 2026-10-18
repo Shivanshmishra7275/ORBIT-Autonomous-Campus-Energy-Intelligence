@@ -7,17 +7,17 @@ interface Props {
 
 export function StrategyCards({ strategies, recommendedId }: Props) {
   return (
-    <section className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)' }}>
+    <section className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-3)' }}>
       <div className="card-header" style={{ marginBottom: 0 }}>
         <div>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+          <h3 style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             Candidate Strategy Breakdown
           </h3>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-            Simulated interventions evaluated against untouched baseline
+          <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '1px' }}>
+            Comparative evaluation of all 3 candidate conservation interventions
           </p>
         </div>
-        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
           {strategies.length} candidate models evaluated
         </span>
       </div>
@@ -44,7 +44,7 @@ export function StrategyCards({ strategies, recommendedId }: Props) {
                 <div className="metric-pill">
                   <div className="metric-pill-label">Est. Savings</div>
                   <div className="metric-pill-value positive">
-                    {strategy.pct_saved.toFixed(2)}%
+                    +{strategy.pct_saved.toFixed(2)}%
                   </div>
                 </div>
 
@@ -52,21 +52,21 @@ export function StrategyCards({ strategies, recommendedId }: Props) {
                   <div className="metric-pill-label">Cost Saved</div>
                   <div className="metric-pill-value positive">
                     ₹{strategy.cost_saved_inr.toFixed(2)}
-                    <span style={{ fontSize: '0.65rem', fontWeight: 400, color: 'var(--text-muted)' }}>/d</span>
+                    <span style={{ fontSize: '0.62rem', fontWeight: 400, color: 'var(--text-muted)' }}>/d</span>
                   </div>
                 </div>
 
                 <div className="metric-pill">
-                  <div className="metric-pill-label">Energy Saved</div>
+                  <div className="metric-pill-label">Energy Delta</div>
                   <div className="metric-pill-value">
                     {strategy.kwh_saved.toFixed(1)}
-                    <span style={{ fontSize: '0.65rem', fontWeight: 400, color: 'var(--text-muted)' }}> kWh/d</span>
+                    <span style={{ fontSize: '0.62rem', fontWeight: 400, color: 'var(--text-muted)' }}> kWh/d</span>
                   </div>
                 </div>
 
                 <div className="metric-pill">
                   <div className="metric-pill-label">Comfort Impact</div>
-                  <div style={{ marginTop: '2px' }}>
+                  <div style={{ marginTop: '1px' }}>
                     <span className={`comfort-badge comfort-${strategy.comfort_impact}`}>
                       {strategy.comfort_impact}
                     </span>
@@ -75,8 +75,8 @@ export function StrategyCards({ strategies, recommendedId }: Props) {
               </div>
 
               {strategy.feasibility_notes && (
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', background: 'var(--bg-elevated)', padding: 'var(--sp-2) var(--sp-3)', borderRadius: 'var(--r-sm)', border: '1px solid var(--border-subtle)' }}>
-                  <strong style={{ color: 'var(--text-muted)', fontSize: '0.7rem', textTransform: 'uppercase' }}>Feasibility: </strong>
+                <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', background: 'var(--bg-elevated)', padding: '5px 8px', borderRadius: 'var(--r-sm)', border: '1px solid var(--border-subtle)' }}>
+                  <strong style={{ color: 'var(--text-muted)', fontSize: '0.68rem', textTransform: 'uppercase' }}>Feasibility: </strong>
                   {strategy.feasibility_notes}
                 </div>
               )}

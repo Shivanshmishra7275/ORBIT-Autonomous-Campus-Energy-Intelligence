@@ -25,7 +25,7 @@ export function Dashboard() {
   const [buildingsLoading, setBuildingsLoading] = useState(true);
   const [apiOnline, setApiOnline] = useState<'ok' | 'err' | 'checking'>('checking');
 
-  // Verify backend health on mount
+  // Verify backend health and fetch initial buildings
   useEffect(() => {
     checkHealth()
       .then(() => setApiOnline('ok'))
@@ -52,7 +52,7 @@ export function Dashboard() {
     [buildings, buildingId]
   );
 
-  // When changing building, clear previous result to avoid stale visual data
+  // When changing building, clear previous analysis to avoid stale results
   const handleSelectBuilding = (id: string) => {
     setBuildingId(id);
     setResult(undefined);
@@ -80,6 +80,10 @@ export function Dashboard() {
     }
   }
 
+  const selectedBuildingDailyCost = selectedBuilding
+    ? selectedBuilding.daily_kwh_baseline * selectedBuilding.tariff_inr_per_kwh
+    : 0;
+
   return (
     <div className="app-layout">
       {/* Top Navigation Bar */}
@@ -95,9 +99,9 @@ export function Dashboard() {
         <div className="topbar-right">
           <span
             className={`badge-api ${apiOnline}`}
-            title={apiOnline === 'ok' ? 'FastAPI Backend Connected' : 'Backend Unreachable'}
+            title={apiOnline === 'ok' ? 'FastAPI Backend Live' : 'Backend Unreachable'}
           >
-            {apiOnline === 'ok' ? 'API Online' : apiOnline === 'err' ? 'API Offline' : 'Connecting…'}
+            {apiOnline === 'ok' ? 'API Connected' : apiOnline === 'err' ? 'API Offline' : 'Connecting…'}
           </span>
           <span className="badge-sim" title="All campus building metrics are synthetically generated">
             Simulated Data
@@ -107,26 +111,67 @@ export function Dashboard() {
 
       {/* Main Workspace */}
       <main className="main-content">
-        {/* Hero Section */}
-        <section className="hero">
-          <h1 className="hero-title">
-            Understand your campus. <span>Optimize its energy.</span>
-          </h1>
-          <p className="hero-sub">
-            Evaluate conservation strategies, protect occupant comfort, and surface actionable, explainable energy recommendations across your facilities.
-          </p>
+        {/* Compact Hero Banner with Real-Time Asset Intelligence Strip */}
+        <section className="hero" aria-label="Campus Energy Intelligence Overview">
+          <div className="hero-content">
+            <h1 className="hero-title">
+              Understand your campus. <span>Optimize its energy.</span>
+            </h1>
+            <p className="hero-sub">
+              Evaluate conservation interventions, protect occupant comfort, and generate explainable energy optimization recommendations.
+            </p>
+          </div>
+
+          {/* Compact Asset Intelligence Summary (API Data Only) */}
+          {selectedBuilding && (
+            <div className="asset-summary-strip" aria-label="Active Asset Energy Snapshot">
+              <div className="summary-chip">
+                <span className="summary-chip-label">Active Facility</span>
+                <span className="summary-chip-val" style={{ color: 'var(--accent-cyan)' }}>
+                  {selectedBuilding.name}
+                </span>
+              </div>
+
+              <div className="summary-divider" aria-hidden="true" />
+
+              <div className="summary-chip">
+                <span className="summary-chip-label">Baseline Demand</span>
+                <span className="summary-chip-val">
+                  {selectedBuilding.daily_kwh_baseline.toLocaleString('en-IN')} kWh/d
+                </span>
+              </div>
+
+              <div className="summary-divider" aria-hidden="true" />
+
+              <div className="summary-chip">
+                <span className="summary-chip-label">Est. Daily Cost</span>
+                <span className="summary-chip-val">
+                  ₹{selectedBuildingDailyCost.toLocaleString('en-IN', { maximumFractionDigits: 0 })}/d
+                </span>
+              </div>
+
+              <div className="summary-divider" aria-hidden="true" />
+
+              <div className="summary-chip">
+                <span className="summary-chip-label">Schedule & Tariff</span>
+                <span className="summary-chip-val" style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                  {selectedBuilding.operating_hours.start}–{selectedBuilding.operating_hours.end} • ₹{selectedBuilding.tariff_inr_per_kwh.toFixed(2)}/kWh
+                </span>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* 2-Column Command Grid */}
         <div className="grid-2">
           {/* Left Column: Control Station */}
-          <aside className="control-panel">
+          <aside className="control-panel" aria-label="Energy Control Panel">
             {/* Building Selection Card */}
             <div className="card">
               <div className="card-header">
                 <span className="card-title">1. Select Campus Asset</span>
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                  {buildings.length} Assets
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                  {buildings.length} Available
                 </span>
               </div>
 
@@ -153,32 +198,21 @@ export function Dashboard() {
                 value={objective}
                 onChange={(e) => setObjective(e.target.value)}
                 placeholder="Describe your energy reduction goal…"
-                rows={3}
+                rows={2}
               />
 
               {/* Quick Preset Chips */}
-              <div style={{ marginTop: 'var(--sp-2)', marginBottom: 'var(--sp-4)' }}>
-                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Presets:
+              <div style={{ marginTop: 'var(--sp-2)', marginBottom: 'var(--sp-3)' }}>
+                <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  Quick Presets:
                 </span>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '4px' }}>
+                <div className="preset-chips-container">
                   {OBJECTIVE_PRESETS.map((preset, idx) => (
                     <button
                       key={idx}
                       type="button"
+                      className={`preset-chip-btn ${objective === preset ? 'active' : ''}`}
                       onClick={() => setObjective(preset)}
-                      style={{
-                        textAlign: 'left',
-                        background: 'var(--bg-elevated)',
-                        border: '1px solid var(--border-subtle)',
-                        borderRadius: 'var(--r-sm)',
-                        padding: '4px 8px',
-                        fontSize: '0.72rem',
-                        color: objective === preset ? 'var(--accent-cyan)' : 'var(--text-secondary)',
-                        cursor: 'pointer',
-                        lineHeight: '1.3',
-                        maxWidth: 'none',
-                      }}
                     >
                       › {preset}
                     </button>
@@ -195,7 +229,7 @@ export function Dashboard() {
                 {status === 'running' ? (
                   <>
                     <span className="btn-spinner" aria-hidden="true" />
-                    <span>Analyzing Scenarios…</span>
+                    <span>Evaluating Scenarios…</span>
                   </>
                 ) : (
                   <>
@@ -204,7 +238,7 @@ export function Dashboard() {
                 )}
               </button>
 
-              <div style={{ marginTop: 'var(--sp-3)' }}>
+              <div style={{ marginTop: 'var(--sp-2)' }}>
                 <StatusBadge
                   status={status}
                   source={result?.source}
@@ -212,18 +246,18 @@ export function Dashboard() {
                 />
               </div>
 
-              <div style={{ marginTop: 'var(--sp-3)', fontSize: '0.72rem', color: 'var(--text-muted)', borderTop: '1px solid var(--border-subtle)', paddingTop: '8px' }}>
-                Dashboard analysis computes via deterministic Python formulas. Agentverse / uAgent runs as an isolated module.
+              <div style={{ marginTop: 'var(--sp-2)', fontSize: '0.7rem', color: 'var(--text-muted)', borderTop: '1px solid var(--border-subtle)', paddingTop: '6px' }}>
+                Deterministic Python simulation engine. Local uAgent available via backend.
               </div>
             </div>
           </aside>
 
-          {/* Right Column: Energy Intelligence Views */}
-          <section className="results-area">
-            {/* Error Notification */}
+          {/* Right Column: Visual Hierarchy Ordered Results */}
+          <section className="results-area" aria-label="Energy Intelligence Results">
+            {/* Error Notification with Retry */}
             {status === 'error' && (
               <div className="error-panel" role="alert">
-                <span className="error-icon">⚠️</span>
+                <span className="error-icon" aria-hidden="true">⚠️</span>
                 <div>
                   <h4 className="error-title">Unable to complete analysis</h4>
                   <p className="error-message">{error}</p>
@@ -232,35 +266,38 @@ export function Dashboard() {
                     className="btn-retry"
                     onClick={onRunAnalysis}
                   >
-                    🔄 Retry Request
+                    🔄 Retry Analysis
                   </button>
                 </div>
               </div>
             )}
 
-            {/* KPI Cards Overview */}
-            <KpiCards
-              building={selectedBuilding}
-              result={result}
-              loading={buildingsLoading}
-            />
+            {/* Visual Hierarchy: When result is available, show Recommendation FIRST */}
+            {result && (
+              <RecommendationPanel result={result} />
+            )}
 
-            {/* Comparison Visualization */}
+            {/* Comparison Visualization: Centerpiece Comparison Chart */}
             <ComparisonChart
               data={result}
               loading={status === 'running'}
             />
 
-            {/* Dynamic Results: Recommendation + Candidate Cards */}
+            {/* Candidate Strategy Breakdown Cards */}
             {result && (
-              <>
-                <RecommendationPanel result={result} />
-                <StrategyCards
-                  strategies={result.strategies}
-                  recommendedId={result.recommended_strategy_id}
-                />
-              </>
+              <StrategyCards
+                strategies={result.strategies}
+                recommendedId={result.recommended_strategy_id}
+              />
             )}
+
+            {/* Baseline Context KPI Cards: Primary context before analysis, Supporting context after analysis */}
+            <KpiCards
+              building={selectedBuilding}
+              result={result}
+              loading={buildingsLoading}
+              isSecondaryContext={Boolean(result)}
+            />
 
             {/* Transparency, Modeling Assumptions & Limitations */}
             <AssumptionsPanel
@@ -277,7 +314,7 @@ export function Dashboard() {
           <strong>ORBIT v1.0</strong> • Built for Fetch-A-Thon 3.0 (GCET Edition) • Autonomous Campus Energy Intelligence Prototype
         </div>
         <div className="footer-meta">
-          All metrics are scenario estimates from synthetic building profiles.
+          All values are simulated scenario models. No physical equipment control.
         </div>
       </footer>
     </div>
