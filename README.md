@@ -28,6 +28,12 @@ FastAPI backend (validated contracts)
 
 Core principle: deterministic Python calculations are always the trust-critical path; the app remains fully usable without optional external AI services.
 
+### Agent integration status (honest behavior)
+
+- The dashboard currently calls deterministic `POST /analyze` directly.
+- This route reports `source: "deterministic_engine"` and is not labeled as an agent execution.
+- The local uAgent exists as a separate backend capability in `backend/app/agents/orbit_agent.py` and must be started explicitly if you want local agent message handling.
+
 ## Quick Start
 
 ### 1) Backend
@@ -65,6 +71,7 @@ Then open `http://127.0.0.1:5173`.
 | Name | Purpose | Required? | Example |
 |---|---|---|---|
 | `FRONTEND_ORIGINS` | Comma-separated allowed CORS origins | Yes (for browser access) | `http://localhost:5173,http://127.0.0.1:5173` |
+| `ORBIT_AGENT_SEED` | Local seed required to start `orbit_agent.py` | Required only for running local uAgent | `replace-with-local-agent-seed` |
 
 ### Frontend (`frontend/.env`)
 
@@ -106,10 +113,19 @@ cd backend
 PYTHONPATH=. pytest --cov=app.services.energy_engine --cov-report=term-missing
 ```
 
-Expected passing shape:
+Latest verified run in this PR:
 
-- `12 passed`
-- coverage line for `app/services/energy_engine.py`
+- `18 passed, 1 warning`
+- `app/services/energy_engine.py` coverage: `100%`
+
+Frontend production build verification:
+
+```bash
+cd frontend
+npm run build
+```
+
+Latest verified run in this PR: build succeeded with 0 errors (single chunk-size warning from Vite reporter).
 
 ## Deployment Notes
 

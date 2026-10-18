@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 
 from app.schemas.contracts import AgentError, AgentResult, AgentTask
 from app.services.energy_engine import analyze_building, load_buildings
@@ -23,7 +24,10 @@ try:
         message: str
 
     def create_uagent() -> Agent:
-        agent = Agent(name="orbit-agent", seed="orbit-agent-local-seed", port=8001, endpoint=["http://127.0.0.1:8001/submit"])
+        seed = os.getenv("ORBIT_AGENT_SEED")
+        if not seed:
+            raise RuntimeError("Missing ORBIT_AGENT_SEED environment variable. Set a local uAgent seed before starting orbit_agent.py.")
+        agent = Agent(name="orbit-agent", seed=seed, port=8001, endpoint=["http://127.0.0.1:8001/submit"])
 
         @agent.on_message(model=AgentTaskModel)
         async def handle_task(ctx: Context, sender: str, msg: AgentTaskModel):

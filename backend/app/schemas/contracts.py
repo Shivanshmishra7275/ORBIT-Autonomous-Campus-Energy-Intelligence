@@ -16,6 +16,7 @@ class OperatingHours(BaseModel):
 class Building(BaseModel):
     building_id: str
     name: str
+    is_simulated: Literal[True] = True
     daily_kwh_baseline: float = Field(..., ge=0)
     tariff_inr_per_kwh: float = Field(..., ge=0)
     operating_hours: OperatingHours

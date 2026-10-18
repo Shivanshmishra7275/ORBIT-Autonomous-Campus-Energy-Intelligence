@@ -1,5 +1,15 @@
 # ORBIT Build Progress
 
+## Review Follow-up (Current PR)
+- [x] Remove hardcoded uAgent seed and require `ORBIT_AGENT_SEED` env var
+- [x] Clarify deterministic `/analyze` path vs separate local uAgent capability
+- [x] Add simulated-data disclosure to building API responses
+- [x] Strengthen tests for invalid numeric inputs, ranking rule, and agent error handling
+- [x] Add pull-request CI workflow for backend tests + frontend production build
+- [x] Re-run backend tests with coverage (**18 passed, 1 warning; energy_engine.py 100% coverage**)
+- [x] Re-run frontend production build (**success; 0 errors, 1 chunk-size warning**)
+- [⚠️] Deployment remains incomplete (no verified live URLs or public end-to-end request)
+
 ## Stage 1 — Inspect & Plan
 - [x] 1.1 Inspect workspace, runtimes, tools
 - [x] 1.2 Write short implementation plan

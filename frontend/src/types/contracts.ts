@@ -7,6 +7,7 @@ export interface OperatingHours {
 export interface Building {
   building_id: string;
   name: string;
+  is_simulated: true;
   daily_kwh_baseline: number;
   tariff_inr_per_kwh: number;
   operating_hours: OperatingHours;

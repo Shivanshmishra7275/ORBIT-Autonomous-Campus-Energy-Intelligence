@@ -15,10 +15,12 @@ def test_buildings_and_single_building():
     listing = client.get("/buildings")
     assert listing.status_code == 200
     assert len(listing.json()) >= 4
+    assert all(item["is_simulated"] is True for item in listing.json())
 
     building = client.get("/buildings/ENG-01")
     assert building.status_code == 200
     assert building.json()["name"] == "Engineering Block"
+    assert building.json()["is_simulated"] is True
 
 
 def test_unknown_building_returns_404():
@@ -39,4 +41,9 @@ def test_analyze_happy_path_and_failure():
 
 def test_analyze_payload_validation():
     invalid = client.post("/analyze", json={"building_id": "ENG-01", "objective": "bad"})
+    assert invalid.status_code == 422
+
+
+def test_analyze_payload_rejects_invalid_building_id_type():
+    invalid = client.post("/analyze", json={"building_id": None, "objective": "Reduce electricity costs while maintaining comfort"})
     assert invalid.status_code == 422

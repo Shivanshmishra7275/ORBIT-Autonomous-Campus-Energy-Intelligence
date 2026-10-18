@@ -80,6 +80,9 @@ export function Dashboard() {
         </button>
 
         <StatusBadge status={status} source={result?.source} />
+        <small>
+          Dashboard analysis runs through deterministic <code>/analyze</code>. Local uAgent execution is a separate backend capability.
+        </small>
       </div>
 
       {status === 'idle' && !result && <div className="panel">Choose a building and run an analysis to compare strategy outcomes.</div>}
