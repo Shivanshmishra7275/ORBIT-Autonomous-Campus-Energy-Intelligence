@@ -16,6 +16,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+export function checkHealth(): Promise<{ status: string }> {
+  return request<{ status: string }>('/health');
+}
+
 export function getBuildings(): Promise<Building[]> {
   return request<Building[]>('/buildings');
 }
