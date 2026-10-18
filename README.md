@@ -230,39 +230,29 @@ npm run build
 
 ## ☁️ Deployment
 
-ORBIT can be deployed for free using:
-- **Backend** → [Render](https://render.com) or [Railway](https://railway.app)
-- **Frontend** → [Vercel](https://vercel.com) or [Netlify](https://netlify.com)
+ORBIT is deployed live in the cloud:
+- **Live Backend (Render):** [`https://orbit-autonomous-campus-energy.onrender.com`](https://orbit-autonomous-campus-energy.onrender.com)
+  - Health check: `https://orbit-autonomous-campus-energy.onrender.com/health` (Verified: `{"status":"ok"}`)
+  - Buildings: `https://orbit-autonomous-campus-energy.onrender.com/buildings` (Verified: 4 assets)
+  - API Swagger Docs: `https://orbit-autonomous-campus-energy.onrender.com/docs`
+- **Frontend Dashboard:** Deployable to [Vercel](https://vercel.com) or [Netlify](https://netlify.com) in 30 seconds.
 
-### Backend (Render/Railway)
+### Deploying Frontend to Vercel (30 Seconds)
 
-```bash
-# Build command (none needed — just set start command):
-python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+1. Go to **[vercel.com](https://vercel.com/)** → **Add New Project** → Import this repository.
+2. Settings:
+   - **Root Directory:** `frontend`
+   - **Framework:** `Vite` (auto-detected)
+3. Environment Variable:
+   - `VITE_API_BASE_URL` = `https://orbit-autonomous-campus-energy.onrender.com`
+4. Click **Deploy**. Your dashboard will be live at `https://<your-project>.vercel.app`!
 
-# Root directory: backend
-# Environment variables to set:
-FRONTEND_ORIGINS=https://your-frontend-url.vercel.app
-```
-
-### Frontend (Vercel)
-
-```bash
-# Root directory: frontend
-# Build command: npm run build
-# Output directory: dist
-# Environment variable:
-VITE_API_BASE_URL=https://your-backend-url.onrender.com
-```
-
-### Verify after deployment
+### Verify After Deployment
 
 ```bash
-curl https://your-backend-url.onrender.com/health
+curl https://orbit-autonomous-campus-energy.onrender.com/health
 # → {"status":"ok"}
 ```
-
-> No live deployment is currently verified. The steps above are reproducible — run them and you'll have a live demo.
 
 ---
 

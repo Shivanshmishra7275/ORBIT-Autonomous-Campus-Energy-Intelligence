@@ -1,18 +1,12 @@
 # ORBIT Build Progress
 
-## Latest Session — 2026-10-18 (Focused UI Polish Pass + GitHub Sync)
+## Latest Session — 2026-10-18 (Production Cloud Deployment & Verification)
 
-### Final UI Polish Pass (Stage 3 & User Directive)
-- **Reduced Vertical Spacing:** Tightened topbar padding, streamlined hero banner into a compact overview card, reduced gaps from 2rem to 1rem for maximum initial viewport information density.
-- **Compact Asset Intelligence Strip:** Added real-time summary strip to the initial viewport showing active facility, baseline demand in kWh/d, estimated daily cost, schedule, and tariff using verified API baseline metrics.
-- **Enhanced Asset Directory (`BuildingSelector.tsx`):** Added explicit `Active` status tag, baseline load and tariff figures directly on the card, and glowing cyan border-left indicator for unequivocal selection state across all 4 buildings.
-- **Enforced Analysis Visual Hierarchy:**
-  1. `RecommendationPanel` (Top priority: recommendation verdict, formula rationale, and annualized impact)
-  2. `ComparisonChart` & `StrategyCards` (Centerpiece multi-metric comparison & candidate strategy cards)
-  3. `KpiCards` (Supporting baseline context and load composition)
-  4. `AssumptionsPanel` (Transparency, modeling methodology & governance limitations)
-- **Precision Formatting:** All currencies formatted in Indian Rupees (`₹`) with commas and two decimals, energy formatted in `kWh/d`, clear non-clipping X-axis labels, and high-contrast tooltips.
-- **Accessibility & Contrast:** Elevated `--text-muted` to `#709ec4` for WCAG AA compliance against dark navy; added `:focus-visible` styling across all interactive elements.
+### Production Deployment (Stage 5 — Live Cloud Verified)
+- **Backend Service:** Deployed on Render at **`https://orbit-autonomous-campus-energy.onrender.com`**.
+- **Live Health Endpoint:** `https://orbit-autonomous-campus-energy.onrender.com/health` returns `{"status":"ok"}` (200 OK).
+- **Live Buildings Endpoint:** `https://orbit-autonomous-campus-energy.onrender.com/buildings` returns all 4 simulated building profiles (200 OK).
+- **Live Analysis Journey:** `POST https://orbit-autonomous-campus-energy.onrender.com/analyze` executed and verified end-to-end for all buildings.
 
 ### Verified Verification Run
 | Check | Result | Evidence |
@@ -21,11 +15,11 @@
 | `pytest tests/ -v` | ✅ **17 passed, 1 skipped** | skipped = optional live uagent loop on Python 3.13 |
 | `energy_engine.py` coverage | ✅ **100%** | `--cov=app.services.energy_engine` |
 | `npm run build` | ✅ **0 errors** | TypeScript type safety verified |
-| `GET /health` | ✅ 200 `{"status":"ok"}` | Uvicorn running on port 8000 |
-| `GET /buildings` | ✅ 200 (4 buildings) | Loaded synchronously |
-| `POST /analyze` (All 4 buildings) | ✅ 200 (100% success rate) | Returns verified `StrategyResult[]` |
+| Cloud `/health` | ✅ 200 `{"status":"ok"}` | `https://orbit-autonomous-campus-energy.onrender.com/health` |
+| Cloud `/buildings` | ✅ 200 (4 buildings) | `https://orbit-autonomous-campus-energy.onrender.com/buildings` |
+| Cloud `/analyze` | ✅ 200 (100% success rate) | Returns verified `StrategyResult[]` on live production server |
 | Frontend dev server | ✅ Running at http://localhost:5173 | Vite v8.3.4 (HMR active) |
-| Git repository sync | ✅ **Pushed to GitHub main** | Commit `4b550a0` live on remote |
+| Git repository sync | ✅ **Pushed to GitHub main** | Verified commit live on remote |
 
 ---
 
@@ -62,8 +56,8 @@
 ## Stage 5 — Verify & Deploy (Tier 1)
 - [x] 5.1 Run full backend tests + coverage (**17 passed, 1 skipped · 100% coverage**)
 - [x] 5.2 Run frontend production build (**0 errors**)
-- [⚠️] 5.3 Attempt deployment — deployment commands documented in README.md
-- [ ] 5.4 Verify deployed /analyze call (post-cloud deployment)
+- [x] 5.3 Attempt deployment — Backend LIVE at `https://orbit-autonomous-campus-energy.onrender.com`
+- [x] 5.4 Verify deployed /analyze call — Tested and verified against live cloud server
 
 ## Stage 6 — Handoff (Tier 1)
 - [x] 6.1 Finalize README.md, ASSUMPTIONS.md, DEMO_SCRIPT.md
