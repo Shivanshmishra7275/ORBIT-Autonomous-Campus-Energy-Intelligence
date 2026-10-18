@@ -1,0 +1,50 @@
+[
+  {
+    "building_id": "ENG-01",
+    "name": "Engineering Block",
+    "daily_kwh_baseline": 3200,
+    "tariff_inr_per_kwh": 8.75,
+    "operating_hours": {"start": "08:00", "end": "20:00", "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]},
+    "hvac_share_pct": 48,
+    "lighting_share_pct": 22,
+    "other_share_pct": 30,
+    "occupancy_profile": "high-density classrooms and labs",
+    "comfort_constraints": ["lab ventilation stability", "classroom thermal comfort"]
+  },
+  {
+    "building_id": "LIB-01",
+    "name": "Central Library",
+    "daily_kwh_baseline": 2500,
+    "tariff_inr_per_kwh": 8.4,
+    "operating_hours": {"start": "07:00", "end": "22:00", "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]},
+    "hvac_share_pct": 34,
+    "lighting_share_pct": 41,
+    "other_share_pct": 25,
+    "occupancy_profile": "long-duration quiet study occupancy",
+    "comfort_constraints": ["stable temperature", "low noise policy", "evening visibility"]
+  },
+  {
+    "building_id": "HST-01",
+    "name": "Boys' Hostel",
+    "daily_kwh_baseline": 1800,
+    "tariff_inr_per_kwh": 7.9,
+    "operating_hours": {"start": "00:00", "end": "23:59", "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]},
+    "hvac_share_pct": 22,
+    "lighting_share_pct": 29,
+    "other_share_pct": 49,
+    "occupancy_profile": "residential with evening/night peaks",
+    "comfort_constraints": ["night-time lighting safety", "resident sleep comfort"]
+  },
+  {
+    "building_id": "ADM-01",
+    "name": "Admin Block",
+    "daily_kwh_baseline": 1400,
+    "tariff_inr_per_kwh": 8.1,
+    "operating_hours": {"start": "09:00", "end": "18:00", "days": ["Mon", "Tue", "Wed", "Thu", "Fri"]},
+    "hvac_share_pct": 37,
+    "lighting_share_pct": 28,
+    "other_share_pct": 35,
+    "occupancy_profile": "weekday office pattern",
+    "comfort_constraints": ["meeting room comfort", "employee productivity"]
+  }
+]
