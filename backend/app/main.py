@@ -8,9 +8,9 @@ from app.api.routes import router
 
 def _cors_origins() -> list[str]:
     origins = os.getenv("FRONTEND_ORIGINS", "*")
-    if origins.strip() == "*":
+    if not origins or origins.strip() == "*":
         return ["*"]
-    return [origin.strip() for origin in origins.split(",") if origin.strip()]
+    return [o.strip() for o in origins.split(",") if o.strip()]
 
 
 app = FastAPI(
@@ -19,9 +19,11 @@ app = FastAPI(
     version="1.0.0",
 )
 
+_origins = _cors_origins()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=_cors_origins(),
+    allow_origins=_origins,
+    allow_origin_regex=r".*" if "*" not in _origins else None,
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
